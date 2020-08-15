@@ -1,0 +1,45 @@
+{
+    "title": "test",
+    "notes": " some human readable sentence",
+    "experiment": "linear_reg",
+    "data_name": "data/train.csv",
+    "folds": 5,
+    "pipeline": "noop",
+    "metrics": [
+        "mse"
+    ],
+    "x_cols": [
+        "building_id"
+    ],
+    "y_cols": [
+        "meter_reading"
+    ],
+    "timestamp": "2020-07-11_12:48:55",
+    "results": [
+        {
+            "mse": [
+                18899806900.366104
+            ]
+        },
+        {
+            "mse": [
+                65922637417.14631
+            ]
+        },
+        {
+            "mse": [
+                29483771984.313713
+            ]
+        },
+        {
+            "mse": [
+                73728779.50177501
+            ]
+        },
+        {
+            "mse": [
+                3029002638.4022694
+            ]
+        }
+    ]
+}
