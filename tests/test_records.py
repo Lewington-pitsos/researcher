@@ -1,11 +1,11 @@
 import unittest
 
 import numpy as np
-from records import *
+from researcher import *
 
 class TestRecordManagement(unittest.TestCase):
     def setUp(self):
-        self.data_path = "data/"
+        self.data_path = "tests/data/"
 
     def test_does_not_mutate_params(self):
         params = {"a": 4, "b": 8, "c": [5, 6, 7, ]}
@@ -34,8 +34,8 @@ class TestRecordManagement(unittest.TestCase):
 
 class TestResults(unittest.TestCase):
     def setUp(self):
-        self.res = load_experiment("data/", "example_record.json").results
-        self.res_multi_epoch = load_experiment("data/", "example_epoch_record.json").results
+        self.res = load_experiment("tests/data/", "example_record.json").results
+        self.res_multi_epoch = load_experiment("tests/data/", "example_epoch_record.json").results
     
     def test_correctly_gathers_metric(self):
         mses = self.res.get_metric("mse")   

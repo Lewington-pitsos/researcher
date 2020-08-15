@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy import stats
 
-from records import *
+from researcher.records import *
 
 def display_results(record_path, hash_segment, metric):
     res = past_experiment_from_hash(record_path, hash_segment).results

@@ -7,8 +7,8 @@ import copy
 
 import numpy as np
 
-from records import *
-from globals import *
+from researcher.records import *
+from researcher.globals import *
 
 def reduced_params(params):
     """Create a copy of the given parameters without descriptive (human-directed) fields.

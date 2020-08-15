@@ -5,7 +5,7 @@ import hashlib
 import datetime
 
 import numpy as np
-from globals import *
+from researcher.globals import *
 
 class Float32Encoder(json.JSONEncoder):
     def default(self, obj):
