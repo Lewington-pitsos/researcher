@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy import stats
 
-from researcher.records import *
+from researcher.fileutils import *
 
 def display_results(record_path, hash_segment, metric):
     res = past_experiment_from_hash(record_path, hash_segment).results
@@ -14,10 +14,7 @@ def display_results(record_path, hash_segment, metric):
     
     return res
 
-def scatter_compare(experiments, metrics, accept=None, **kwargs):
-    if accept:
-        experiments = [e for e in experiments if accept(e)]
-    
+def scatter_compare(experiments, metrics, **kwargs):
     fig, axes = plt.subplots(len(metrics), **kwargs)
     
     for i, metric in enumerate(metrics):  
