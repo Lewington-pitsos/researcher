@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="researcher",
-    version="0.0.15",
+    version="0.0.16",
     author="Louka Ewington-Pitsos",
     author_email="lewingtonpitsos@gmail.com",
     description="A tool for recording the results of data science experiments",
@@ -20,4 +20,6 @@ setuptools.setup(
     ],
     install_requires=['scipy', 'numpy', 'matplotlib'],
     python_requires='>=3.6',
+    test_suite='nose.collector',
+    tests_require=['nose'],
 )

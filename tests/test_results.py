@@ -1,15 +1,16 @@
 import unittest
 
-from researcher.results import *
-from researcher.fileutils import load_experiment
+import researcher as rs
 
-class TestResults(unittest.TestCase):
+from tests.tools import TEST_DATA_PATH
+
+class TestResultAnalysis(unittest.TestCase):
     def setUp(self):
-        self.res = load_experiment("tests/data/", "example_record.json").results
-        self.res_multi_epoch = load_experiment("tests/data/", "example_epoch_record.json").results
+        self.e1 = rs.load_experiment(TEST_DATA_PATH, "example_record.json")
+        self.e2 = rs.load_experiment(TEST_DATA_PATH, "example_epoch_record.json")
     
     def test_correctly_gathers_metric(self):
-        mses = self.res.get_metric("mse")   
+        mses = self.e1.get_metric("mse")   
 
         self.assertEqual(len(mses), 5)
         self.assertEqual(len(mses[0]), 1)
@@ -18,7 +19,7 @@ class TestResults(unittest.TestCase):
         self.assertEqual(len(mses[3]), 1)
         self.assertEqual(len(mses[4]), 1)
 
-        mses = self.res_multi_epoch.get_metric("mse")   
+        mses = self.e2.get_metric("mse")   
 
         self.assertEqual(len(mses), 5)
         self.assertEqual(len(mses[0]), 2)
@@ -26,3 +27,4 @@ class TestResults(unittest.TestCase):
         self.assertEqual(len(mses[2]), 2)
         self.assertEqual(len(mses[3]), 2)
         self.assertEqual(len(mses[4]), 2)
+    
