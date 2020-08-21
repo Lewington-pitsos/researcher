@@ -1,14 +1,16 @@
 import datetime
 
 from researcher.globals import DATE_FORMAT, RESULTS_NAME
-from researcher.results import Results
+from researcher.results import FinalizedResults
 
-class Experiment():
+class Experiment(FinalizedResults):
     def __init__(self, data):
-        if data[RESULTS_NAME]:
-            self.results = Results(data[RESULTS_NAME])
+        if RESULTS_NAME in data:
+            results = data[RESULTS_NAME]
         else:
-            self.results = None
+            results = None
+
+        super().__init__(results=results)
         
         self.data = data
         self.timestamp = datetime.datetime.strptime(self.data["timestamp"], DATE_FORMAT)
