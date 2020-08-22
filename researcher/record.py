@@ -32,5 +32,5 @@ def record_experiment(params, results, save_path):
     else:
         title = "no_title"
 
-    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, results=results.view())
+    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, results=results.results)
 
