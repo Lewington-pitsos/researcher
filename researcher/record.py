@@ -20,17 +20,20 @@ def reduced_params(params, unwanted_keys):
     return {k: params[k] for k in params.keys() - unwanted_keys}
 
 
-def record_experiment(params, results, save_path):
+def record_experiment(params, result_data, save_path, duration=None):
     cloned_params = copy.deepcopy(params)
     param_hash = get_hash(cloned_params)
 
     cloned_params["hash"] = param_hash
     cloned_params["timestamp"] = datetime.datetime.now().strftime(DATE_FORMAT)
 
+    if duration is not None:
+        cloned_params["duration"] = duration.total_seconds()
+
     if "title" in cloned_params:
         title = cloned_params["title"]
     else:
         title = "no_title"
 
-    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, results=results.results)
+    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, results=result_data)
 

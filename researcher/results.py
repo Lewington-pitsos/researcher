@@ -31,7 +31,7 @@ class ResultBuilder(Results):
         self.__integrate(fold, name)
         self.__add_value(fold, name, value)
 
-    def add_all(self, fold, name, values):
+    def add_multiple(self, fold, name, values):
         self.__integrate(fold, name)
 
         for value in values:

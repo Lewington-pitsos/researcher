@@ -34,13 +34,25 @@ def scatter_compare(experiments, metrics, **kwargs):
 def plot_lr(e, metric):
     _, ax = plt.subplots(figsize=(20, 20))
     
-    ax.plot(e.get_metric(metric)[0])
-    ax.plot(e.get_metric('learning_rate')[0])
+    values = e.get_metric(metric)[0]
+    lr_values = e.get_metric('learning_rate')[0]
     
-    best_index = np.argmin(e.get_metric(metric)[0])
-    print("lowerst loss achieved at: ", best_index)
-    print("corresponding lr: ", e.get_metric(metric)[0][best_index])
-
+    ax.plot(values)
+    ax.plot(lr_values)
+    
+    start_index = 0
+    start = values[0]
+    for i, v in enumerate(values):
+        if v < start:
+            start_index = i
+            break
+    
+    print("loss began to decrease at: ", start_index)
+    print("corresponding lr: ", lr_values[start_index])
+    
+    best_index = np.argmin(values)
+    print("lowest loss achieved at: ", best_index)
+    print("corresponding lr: ", lr_values[best_index])
 
 def plot_training(e, metric, **kwargs):
     trn = e.get_metric(metric)

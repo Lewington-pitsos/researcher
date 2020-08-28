@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="researcher",
-    version="0.0.19",
+    version="0.0.21",
     author="Louka Ewington-Pitsos",
     author_email="lewingtonpitsos@gmail.com",
     description="A tool for recording the results of data science experiments",
