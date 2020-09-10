@@ -9,6 +9,7 @@ import numpy as np
 
 from researcher.fileutils import *
 from researcher.globals import *
+from researcher.results import Results
 
 def reduced_params(params, unwanted_keys):
     """Create a copy of the given parameters without descriptive (human-directed) fields.
@@ -21,6 +22,12 @@ def reduced_params(params, unwanted_keys):
 
 
 def record_experiment(params, result_data, save_path, duration=None):
+    if isinstance(result_data, Results):
+        result_data = result_data.fold_results
+    
+    if not os.path.isdir(save_path):
+        os.mkdir(save_path)
+
     cloned_params = copy.deepcopy(params)
     param_hash = get_hash(cloned_params)
 

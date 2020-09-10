@@ -5,7 +5,7 @@
     "alpha": 2e-09,
     "model": "rnn",
     "hash": "d45dee5991986a5b8215706f5e904b3e",
-    "timestamp": "2020-08-22_10:28:18",
+    "timestamp": "2020-09-11_07:11:12",
     "results": [
         {
             "rmse": [

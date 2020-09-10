@@ -55,18 +55,18 @@ def plot_lr(e, metric):
     print("corresponding lr: ", lr_values[best_index])
 
 def plot_training(e, metric, **kwargs):
-    trn = e.get_metric(metric)
-    val = e.get_val_metric(metric)
+    if isinstance(e, list):
+        e = e[0]
 
-    _, ax = plt.subplots(len(trn) + 1, **kwargs)
+    trn = e.get_metric(metric)
+
+    _, ax = plt.subplots(len(trn), **kwargs)
+    if len(trn) == 1:
+        ax = [ax]
     
     for i in range(len(trn)):
         ax[i].plot(trn[i])
-        ax[i].plot(val[i])
-    
-    ax[len(trn)].plot(np.mean(np.array(trn), axis=0))
-    ax[len(trn)].plot(np.mean(np.array(val), axis=0))
-
+        
 def compare_training(es, metric, **kwargs):
     fig, ax = plt.subplots(**kwargs)
     labels = []
