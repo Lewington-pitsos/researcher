@@ -64,9 +64,9 @@ class ResultBuilder(Results):
     def add(self, fold, name, value):
         if fold is None or fold == GENERAL_NAME:
             self.general_results[name] = value
-
-        self.__integrate(fold, name)
-        self.__add_fold_value(fold, name, value)
+        else:
+            self.__integrate(fold, name)
+            self.__add_fold_value(fold, name, value)
 
     def add_multiple(self, fold, name, values):
         self.__integrate(fold, name)
