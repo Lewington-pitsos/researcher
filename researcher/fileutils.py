@@ -2,9 +2,10 @@ import os
 import json
 import binascii
 import hashlib
+import math
 
 import numpy as np
-from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME
+from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_NAME
 from researcher.experiment import Experiment
 
 class TrickyValuesEncoder(json.JSONEncoder):
@@ -15,6 +16,7 @@ class TrickyValuesEncoder(json.JSONEncoder):
             return int(obj)
         elif isinstance(obj, np.ndarray):
             return obj.tolist()
+        
         return json.JSONEncoder.default(self, obj)
 
 def get_hash(params):
@@ -23,11 +25,12 @@ def get_hash(params):
 def save_experiment(path, name, parameters, fold_results=None, general_results=None):
     file_name = path + name + ".json"
 
-    experiment_dict = {**parameters}
+    result_dict = {}
+    experiment_dict = {**parameters, RESULTS_NAME: result_dict}
     if fold_results is not None:
-        experiment_dict[RESULTS_NAME] = fold_results
+        result_dict[FOLD_RESULTS_NAME] = fold_results
     if general_results is not None:
-        experiment_dict[GENERAL_RESULTS_NAME] = general_results
+        result_dict[GENERAL_RESULTS_NAME] = general_results
 
     with open(file_name, "w") as f:
         f.write(json.dumps(experiment_dict, indent=4, cls=TrickyValuesEncoder))

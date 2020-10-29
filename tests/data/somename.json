@@ -6,11 +6,13 @@
         6,
         7
     ],
-    "general_results": {
-        "loss": [
-            0.1,
-            0.4,
-            0.231
-        ]
+    "results": {
+        "general_results": {
+            "loss": [
+                0.1,
+                0.4,
+                0.231
+            ]
+        }
     }
 }
