@@ -1,12 +1,18 @@
 import datetime
 
-from researcher.globals import DATE_FORMAT, RESULTS_NAME, GENERAL_RESULTS_NAME
+from researcher.globals import DATE_FORMAT, RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_NAME
 from researcher.results import FinalizedResults
 
 class Experiment(FinalizedResults):
     def __init__(self, data):
-        fold_results = data[RESULTS_NAME] if RESULTS_NAME in data else None
-        general_results = data[GENERAL_RESULTS_NAME] if GENERAL_RESULTS_NAME in data else None
+        if RESULTS_NAME in data:
+            results = data[RESULTS_NAME]
+
+            fold_results = results[FOLD_RESULTS_NAME] if FOLD_RESULTS_NAME in results else None
+            general_results = results[GENERAL_RESULTS_NAME] if GENERAL_RESULTS_NAME in results else None
+        else:
+            fold_results = None
+            general_results = None
 
         super().__init__(fold_results, general_results)
         

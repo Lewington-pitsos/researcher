@@ -42,7 +42,6 @@ class TestResultAnalysis(unittest.TestCase):
 
         rb.add(0, "fold_loss", 0.5)
 
-
     def test_prevents_general_metrics_with_fold_metric_names(self):
         rb = rs.ResultBuilder()
 
