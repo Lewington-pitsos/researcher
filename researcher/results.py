@@ -50,6 +50,8 @@ class ResultBuilder(Results):
     def __init__(self):
         super().__init__(None)
 
+        self.__fold_metric_names = set()
+
     def __add_fold_value(self, fold, name, value):
         self.fold_results[fold][name].append(value)
 
@@ -61,12 +63,29 @@ class ResultBuilder(Results):
         if len(self.fold_results) > fold + 1:
             raise ValueError("Attempt to write to fold {} when results {} contains {} folds already. We shouldn't be writing to already finalized folds.".format(fold, self.fold_results, len(self.fold_results)))
 
+    def set_general_metric(self, name, value):
+        self.add(GENERAL_RESULTS_NAME, name, value)
+
+    def set_general_metrics(self, result_dict):
+        for key, value in result_dict.items():
+            self.add(GENERAL_RESULTS_NAME, key, value)
+
     def add(self, fold, name, value):
-        if fold is None or fold == GENERAL_NAME:
+        if fold is None or fold == GENERAL_RESULTS_NAME:
+            if name in  self.__fold_metric_names:
+                raise ValueError(f"metric name {name} has already been given to a fold metric {self.fold_results}, adding it to general results")
+            if name in self.general_results.keys():
+                raise ValueError(f"metric name {name} already exists in general results: {self.general_results}")
+            
             self.general_results[name] = value
+
         else:
+            if name in self.general_results.keys():
+                raise ValueError(f"metric name {name} already exists in general results {self.general_results}, adding it to the results fold {fold} would create ambiguity")
+
             self.__integrate(fold, name)
             self.__add_fold_value(fold, name, value)
+            self.__fold_metric_names.add(name)
 
     def add_multiple(self, fold, name, values):
         self.__integrate(fold, name)

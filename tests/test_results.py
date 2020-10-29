@@ -27,4 +27,38 @@ class TestResultAnalysis(unittest.TestCase):
         self.assertEqual(len(mses[2]), 2)
         self.assertEqual(len(mses[3]), 2)
         self.assertEqual(len(mses[4]), 2)
+
+    def test_prevents_fold_metrics_with_general_metric_names(self):
+        rb = rs.ResultBuilder()
+        rb.set_general_metric("loss", 0.5)
+
+        self.assertRaises(ValueError, rb.add, 0, "loss", 0.5)
+        self.assertRaises(ValueError, rb.add, 0, "loss", 0.2)
+        self.assertRaises(ValueError, rb.add, 0, "loss", 0.1)
+
+        rb.add(0, "fold_loss", 0.5)
+
+
+    def test_prevents_general_metrics_with_fold_metric_names(self):
+        rb = rs.ResultBuilder()
+
+        rb.add(0, "loss", 0.5)
+        rb.add(0, "loss", 0.2)
+        rb.add(0, "loss", 0.1)
+
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.5)
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.2)
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.1)
+
+        rb.set_general_metric("general_loss", 0.5)
+
+    def test_prevents_general_metrics_being_overwritten(self):
+        rb = rs.ResultBuilder()
+        rb.set_general_metric("loss", 0.5)
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.5)
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.2)
+        self.assertRaises(ValueError, rb.set_general_metric, "loss", 0.1)
+
+
+
     
