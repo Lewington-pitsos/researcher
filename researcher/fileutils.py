@@ -7,14 +7,18 @@ import numpy as np
 from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME
 from researcher.experiment import Experiment
 
-class Float32Encoder(json.JSONEncoder):
+class TrickyValuesEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.float32):
             return float(obj)
+        elif isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
 def get_hash(params):
-    return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params).encode("utf-8")).digest()), 16))[2:]
+    return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params, cls=TrickyValuesEncoder).encode("utf-8")).digest()), 16))[2:]
 
 def save_experiment(path, name, parameters, fold_results=None, general_results=None):
     file_name = path + name + ".json"
@@ -26,7 +30,7 @@ def save_experiment(path, name, parameters, fold_results=None, general_results=N
         experiment_dict[GENERAL_RESULTS_NAME] = general_results
 
     with open(file_name, "w") as f:
-        f.write(json.dumps(experiment_dict, indent=4, cls=Float32Encoder))
+        f.write(json.dumps(experiment_dict, indent=4, cls=TrickyValuesEncoder))
 
 def all_experiments(path):
     experiments = []
