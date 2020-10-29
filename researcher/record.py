@@ -21,10 +21,13 @@ def reduced_params(params, unwanted_keys):
     return {k: params[k] for k in params.keys() - unwanted_keys}
 
 
-def record_experiment(params, result_data, save_path, duration=None):
-    if isinstance(result_data, Results):
-        result_data = result_data.fold_results
-    
+def record_experiment_with_result_builder(params, save_path, result_builder=None, duration=None):
+    fold_results = result_builder.fold_results if result_builder is not None else None
+    general_results = result_builder.general_results if result_builder is not None else None
+
+    record_experiment(params, save_path, fold_results, general_results, duration)
+
+def record_experiment(params, save_path, fold_results=None, general_results=None, duration=None):
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
 
@@ -42,5 +45,5 @@ def record_experiment(params, result_data, save_path, duration=None):
     else:
         title = "no_title"
 
-    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, results=result_data)
+    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, fold_results=fold_results, general_results=general_results)
 

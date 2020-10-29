@@ -7,48 +7,13 @@ from researcher.globals import *
 class Results():
     """Results provides an api to handle the collection and analysis of experiment results
     """
-    def __init__(self, results):
-        """ self.fold_results holds a mapping from each fold to each metric and from each metric to 
-        all the recorded metric scores for that metric.
-        fold -> metric -> [value, value, value, ...]
-        """
-
-        if results is None:
-            self.results = {
-                FOLD_RESULTS_NAME: [],
-                GENERAL_RESULTS_NAME: {},
-            }
-        elif isinstance(results, dict):
-            if FOLD_RESULTS_NAME not in results and GENERAL_RESULTS_NAME not in results:
-                # assume we are just being passed some general results
-                self.results = {
-                    FOLD_RESULTS_NAME: [],
-                    GENERAL_RESULTS_NAME: results,
-                }
-            elif FOLD_RESULTS_NAME in results and GENERAL_RESULTS_NAME in results and len(results) == 2:
-                    self.results = results
-            elif FOLD_RESULTS_NAME in results and len(results) == 1:
-                self.results = results
-                self.results[GENERAL_RESULTS_NAME] = {}
-            elif GENERAL_RESULTS_NAME in results and len(results) == 1:
-                self.results = results
-                self.results[FOLD_RESULTS_NAME] = []
-            else:
-                raise ValueError(f"cannot initialize a Results instance from {results}")
-        elif isinstance(results, list):
-            self.results = {
-                FOLD_RESULTS_NAME: results,
-                GENERAL_RESULTS_NAME: {},
-            }
-        else:
-            raise ValueError(f"cannot initialize a Results instance from {results} of type {type(results)}")
-
-        self.fold_results = self.results[FOLD_RESULTS_NAME]
-        self.general_results = self.results[GENERAL_RESULTS_NAME]
+    def __init__(self, fold_results=None, general_results=None):
+        self.general_results = general_results if general_results is not None else {}
+        self.fold_results = fold_results if fold_results is not None else []
 
 class ResultBuilder(Results):
     def __init__(self):
-        super().__init__(None)
+        super().__init__(None, None)
 
         self.__fold_metric_names = set()
 
@@ -97,8 +62,8 @@ class ResultBuilder(Results):
         return len(self.fold_results) - 1
 
 class FinalizedResults(Results):
-    def __init__(self, results):
-        super().__init__(results=results)
+    def __init__(self, fold_results, general_results):
+        super().__init__(fold_results, general_results)
 
     def get_metric(self, target_metric):
         if target_metric in self.general_results:

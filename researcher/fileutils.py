@@ -4,7 +4,7 @@ import binascii
 import hashlib
 
 import numpy as np
-from researcher.globals import *
+from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME
 from researcher.experiment import Experiment
 
 class Float32Encoder(json.JSONEncoder):
@@ -16,10 +16,17 @@ class Float32Encoder(json.JSONEncoder):
 def get_hash(params):
     return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params).encode("utf-8")).digest()), 16))[2:]
 
-def save_experiment(path, name, parameters, results):
+def save_experiment(path, name, parameters, fold_results=None, general_results=None):
     file_name = path + name + ".json"
+
+    experiment_dict = {**parameters}
+    if fold_results is not None:
+        experiment_dict[RESULTS_NAME] = fold_results
+    if general_results is not None:
+        experiment_dict[GENERAL_RESULTS_NAME] = general_results
+
     with open(file_name, "w") as f:
-        f.write(json.dumps({**parameters, **{"results": results}}, indent=4, cls=Float32Encoder))
+        f.write(json.dumps(experiment_dict, indent=4, cls=Float32Encoder))
 
 def all_experiments(path):
     experiments = []

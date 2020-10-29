@@ -1,16 +1,14 @@
 import datetime
 
-from researcher.globals import DATE_FORMAT, RESULTS_NAME
+from researcher.globals import DATE_FORMAT, RESULTS_NAME, GENERAL_RESULTS_NAME
 from researcher.results import FinalizedResults
 
 class Experiment(FinalizedResults):
     def __init__(self, data):
-        if RESULTS_NAME in data:
-            results = data[RESULTS_NAME]
-        else:
-            results = None
+        fold_results = data[RESULTS_NAME] if RESULTS_NAME in data else None
+        general_results = data[GENERAL_RESULTS_NAME] if GENERAL_RESULTS_NAME in data else None
 
-        super().__init__(results=results)
+        super().__init__(fold_results, general_results)
         
         self.data = data
         self.timestamp = datetime.datetime.strptime(self.data["timestamp"], DATE_FORMAT)

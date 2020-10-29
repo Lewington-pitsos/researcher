@@ -8,7 +8,11 @@ class TestResultAnalysis(unittest.TestCase):
     def setUp(self):
         self.e1 = rs.load_experiment(TEST_DATA_PATH, "example_record.json")
         self.e2 = rs.load_experiment(TEST_DATA_PATH, "example_epoch_record.json")
+        self.e3 = rs.load_experiment(TEST_DATA_PATH, "example_record_general.json")
     
+    def test_correctly_loads_general_results(self):
+        self.assertAlmostEqual(self.e3.general_results["flange_loss"], 0.44)
+
     def test_correctly_gathers_metric(self):
         mses = self.e1.get_metric("mse")   
 

@@ -27,7 +27,7 @@ class TestSavingExperiment(unittest.TestCase):
             for j in range(1, 8):
                 res.add(i, "rmse", 0.98 / j)
 
-        rs.record_experiment(params, res, TEST_EXPERIMENT_PATH)
+        rs.record_experiment_with_result_builder(params, TEST_EXPERIMENT_PATH, res)
 
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))
 
@@ -46,6 +46,6 @@ class TestSavingExperiment(unittest.TestCase):
             for j in range(1, 8):
                 res.add(i, "rmse", 0.98 / j)
 
-        rs.record_experiment(params, res.fold_results, TEST_EXPERIMENT_PATH)
+        rs.record_experiment(params, TEST_EXPERIMENT_PATH, fold_results=res.fold_results)
 
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))

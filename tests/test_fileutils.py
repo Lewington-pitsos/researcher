@@ -32,3 +32,14 @@ class TestFileUtils(unittest.TestCase):
             saved = json.load(f)
 
         self.assertDictEqual(saved, expected)
+
+    def test_saves_general_results_correctly(self):
+        params = {"a": 4, "b": 8, "c": [5, 6, 7]}
+        expected = {"a": 4, "b": 8, "c": [5, 6, 7], "general_results": {"loss": [0.1, 0.4, 0.231]}}
+
+        rs.save_experiment(TEST_DATA_PATH, "somename", params, general_results={"loss": [0.1, 0.4, 0.231]})
+
+        with open(TEST_DATA_PATH + "somename.json") as f:
+            saved = json.load(f)
+
+        self.assertDictEqual(saved, expected)
