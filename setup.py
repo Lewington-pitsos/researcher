@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="researcher",
-    version="0.0.29",
+    version="0.0.31",
     author="Louka Ewington-Pitsos",
     author_email="lewingtonpitsos@gmail.com",
     description="A tool for recording the results of data science experiments",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/Lewington-pitsos/researcher",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
