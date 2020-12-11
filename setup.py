@@ -18,7 +18,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=['scipy', 'numpy', 'matplotlib'],
+    install_requires=['numpy', 'matplotlib'],
     python_requires='>=3.6',
     test_suite='nose.collector',
     tests_require=['nose'],
