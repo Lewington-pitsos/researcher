@@ -4,8 +4,18 @@ from scipy import stats
 from researcher.fileutils import *
 
 def display_results(record_path, hash_segment, metric):
+    """Locates a record and prints the average score recorded for the given metric and plots the score for that metric for each fold in that record.
+
+    Args:
+        record_path (string): The relative path where the record we want to display information about is located.
+        hash_segment (string): At least 8 consecutive characters from the unique hash of the record we want to display information about.
+        metric (string): The name of the metric we want to display. 
+
+    Returns:
+        researcher.experiment.Experiment: The experiment from the given record directory that contains the given hash segment.
+    """
     e = past_experiment_from_hash(record_path, hash_segment)
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
 
     print(np.mean(e.get_metric(metric)))
 
