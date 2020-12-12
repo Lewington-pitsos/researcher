@@ -103,7 +103,7 @@ experiments[0].data
 # 'lr': 0.001,
 # 'hash': 'eebb49b9d1487396dd6c0e5271cc3083',
 # 'timestamp': '2020-12-10_00:01:04',
-# 'results': {'general_results': {'loss': [0.35920432209968567,
+# 'observations': {'loss': [0.35920432209968567,
 #     0.16782893240451813,
 #     0.12179006636142731,
 #     0.09385494887828827,
@@ -123,13 +123,14 @@ experiments[0].data
 #     0.9675999879837036,
 #     0.9672999978065491,
 #     0.9717000126838684]},
-# 'fold_results': {}}
 # }
 ```
 
 You can also use some pre-built plotting functions to visualize these experimental results (see `researcher/dashboard.py`), but depending on what kinds of experiments you're running, you'll probably want to define your own.
 
 ```python
+import matplotlib.pyplot as plt
+
 def plot_metric(e, metric):
     plt.plot(e.data["observations"][metric])
 

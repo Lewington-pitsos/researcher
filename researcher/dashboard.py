@@ -169,7 +169,7 @@ def plot_folds(es, metrics, **kwargs):
     if not isinstance(es, list):
         es = [es]
     
-    f, ax = plt.subplots(len(metrics), **kwargs)
+    _, ax = plt.subplots(len(metrics), **kwargs)
     
     if len(metrics) == 1:
         ax = [ax]
