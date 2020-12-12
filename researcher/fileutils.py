@@ -2,7 +2,6 @@ import os
 import json
 import binascii
 import hashlib
-import math
 
 import numpy as np
 from researcher.globals import OBSERVATIONS_NAME

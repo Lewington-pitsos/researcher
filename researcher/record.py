@@ -1,6 +1,7 @@
 import datetime
 import os
 import copy
+from researcher.observations import ObservationBuilder
 
 
 from researcher.fileutils import *
@@ -44,12 +45,11 @@ def record_experiment_with_result_builder(params, save_path, result_builder=None
         duration (datetime.timedelta, optional): The time elapsed between
         the start and the end of the experiment. Defaults to None.
     """
-    fold_results = result_builder.fold_results if result_builder is not None else None
-    general_results = result_builder.general_results if result_builder is not None else None
+    observations = result_builder.observations if result_builder is not None else None
 
-    record_experiment(params, save_path, fold_results, general_results, duration)
+    record_experiment(params, save_path, observations, duration)
 
-def record_experiment(params, save_path, fold_results=None, general_results=None, duration=None):
+def record_experiment(params, save_path, observations=None, duration=None):
     """Saves the parameters and associated experimental results to a JSON
     experiment record.
 
@@ -63,11 +63,8 @@ def record_experiment(params, save_path, fold_results=None, general_results=None
         fold_results (dict, optional): The fold-wise results of the 
         experiment. Defaults to None.
         
-        general_results (dict, optional): The results of the experiment 
-        that are not related to a particular fold. Defaults to None.
-
-        duration (datetime.timedelta, optional): The time elapsed between
-        the start and the end of the experiment. Defaults to None.
+        observations (dict, optional): The observations made during the
+        experiment. Defaults to None.
     """
     if not os.path.isdir(save_path):
         os.mkdir(save_path)
@@ -86,5 +83,5 @@ def record_experiment(params, save_path, fold_results=None, general_results=None
     else:
         title = "no_title"
 
-    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, fold_results=fold_results, general_results=general_results)
+    save_experiment(save_path, "{}_{}".format(title, param_hash), parameters=cloned_params, observations=observations)
 

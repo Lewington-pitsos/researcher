@@ -26,7 +26,7 @@ class TestSavingExperiment(unittest.TestCase):
 
         for i in range(3):
             for j in range(1, 8):
-                res.add(i, "rmse", 0.98 / j)
+                res.add_fold_observation(i, "rmse", 0.98 / j)
 
         rs.record_experiment_with_result_builder(params, TEST_EXPERIMENT_PATH, res)
 
@@ -45,9 +45,9 @@ class TestSavingExperiment(unittest.TestCase):
 
         for i in range(3):
             for j in range(1, 8):
-                res.add(i, "rmse", 0.98 / j)
+                res.add_fold_observation(i, "rmse", 0.98 / j)
 
-        rs.record_experiment(params, TEST_EXPERIMENT_PATH, fold_results=res.fold_results)
+        rs.record_experiment(params, TEST_EXPERIMENT_PATH, observations=res.observations)
 
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))
     
@@ -60,7 +60,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        rs.record_experiment(params, TEST_EXPERIMENT_PATH, fold_results=None)
+        rs.record_experiment(params, TEST_EXPERIMENT_PATH, observations=None)
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))
 
     def test_records_NANs_as_zero(self):
@@ -76,9 +76,9 @@ class TestSavingExperiment(unittest.TestCase):
 
         for i in range(3):
             for j in range(1, 8):
-                res.add(i, "rmse", float('nan'))
+                res.add_fold_observation(i, "rmse", float('nan'))
 
-        rs.record_experiment(params, TEST_EXPERIMENT_PATH, fold_results=res.fold_results)
+        rs.record_experiment(params, TEST_EXPERIMENT_PATH, observations=res.observations)
 
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))
         e = rs.load_experiment(TEST_EXPERIMENT_PATH, "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json")
