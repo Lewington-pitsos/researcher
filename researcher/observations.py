@@ -32,6 +32,20 @@ class ObservationCollector(Observations):
         while len(self.observations[key]) <= fold:
             self.observations[key].append([])
 
+    def add_tensorflow_history(self, fold, history):
+        """Adds all the data in a tensorflow History instance to the 
+        specified fold.
+
+        Args:
+            fold (int): The fold to add data to.
+
+            history (tensorflow.keras.callbacks.History): A record of the
+            training loss values and metrics recorded during the training
+            of a tensorflow model.
+        """
+        for key, values in history.history.items():
+            self.add_multiple(fold, key, values)
+
     def set_observation(self, key, value):
         """Stores the specified values under the specified key. 
 
