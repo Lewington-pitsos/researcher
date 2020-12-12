@@ -1,8 +1,10 @@
+"""Contains functions to save experiment parameters and results more easily.
+"""
+
 import datetime
 import os
 import copy
 from researcher.observations import ObservationCollector
-
 
 from researcher.fileutils import *
 from researcher.globals import *
