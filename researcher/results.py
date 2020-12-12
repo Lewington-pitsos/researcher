@@ -1,3 +1,7 @@
+"""Contains classes to better manage experiment result data, both while
+collecting it for recording and loading it for analysis.
+"""
+
 from collections import defaultdict
 
 import numpy as np

@@ -1,7 +1,9 @@
+"""Contains functions to save experiment parameters and results more easily.
+"""
+
 import datetime
 import os
 import copy
-
 
 from researcher.fileutils import *
 from researcher.globals import *
@@ -28,7 +30,7 @@ def reduced_params(params, unwanted_keys):
 
 def record_experiment_with_result_builder(params, save_path, result_builder=None, duration=None):
     """Saves the experiment parameters and results by unpacking those 
-    results from a researcher.ResultBuilder instance.
+    results from a ResultBuilder instance.
 
     Args:
         params (dict): The parameters that define the experimental 
@@ -37,7 +39,7 @@ def record_experiment_with_result_builder(params, save_path, result_builder=None
         save_path (string): The parent directory in which to save 
         experimental results.
         
-        result_builder (researcher.ResultBuilder, optional): An object 
+        result_builder (ResultBuilder, optional): An object 
         which contains the results observed from running the experiment.
         Defaults to None.
 

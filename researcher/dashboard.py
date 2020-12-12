@@ -1,3 +1,7 @@
+"""Contains helper functions for visualizing the results of experiments
+and comparing recorded experiments to one another.
+"""
+
 import matplotlib.pyplot as plt
 
 from researcher.fileutils import *
@@ -17,7 +21,7 @@ def display_results(record_path, hash_segment, metric):
         metric (string): The name of the metric we want to display. 
 
     Returns:
-        researcher.Experiment: The experiment from the given record 
+        Experiment: The experiment from the given record 
         directory that contains the given hash segment.
     """
     e = past_experiment_from_hash(record_path, hash_segment)
@@ -35,7 +39,7 @@ def plot_compare(experiments, metrics, **kwargs):
     final score, and also plots all those scores onto a line graph.
 
     Args:
-        experiments (list[researcher.Experiment]): The experiments that to
+        experiments (list[Experiment]): The experiments that to
         compare.
 
         metrics ([list[string]): The metrics to compare the given 
@@ -65,7 +69,7 @@ def plot_lr(e, metric, n_increases=3):
     increase.
 
     Args:
-        e (researcher.Experiment): The experiment of interest.
+        e (Experiment): The experiment of interest.
 
         metric (string): The metric of interest. 
         
@@ -122,7 +126,7 @@ def plot_training(es, metrics, **kwargs):
     given experiments will be plotted on a separate line graph.
 
     Args:
-        es (list[researcher.Experiment]): The experiments of intererst.
+        es (list[Experiment]): The experiments of intererst.
 
         metrics (list[string]): The metrics on which to compare the 
         experiments of interest. 
@@ -148,7 +152,7 @@ def plot_folds(es, metrics, **kwargs):
     experiments will be plotted on a scatter graph.
 
     Args:
-        es (list[researcher.Experiment]): The experiments of interest.
+        es (list[Experiment]): The experiments of interest.
 
         metrics (list[string]): The metrics on which to compare the 
         experiments of interest.

@@ -1,8 +1,11 @@
+"""Contains helper functions for saving and loading experiments using the
+json package.
+"""
+
 import os
 import json
 import binascii
 import hashlib
-import math
 
 import numpy as np
 from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_NAME
@@ -83,7 +86,7 @@ def all_experiments(path):
         load.
 
     Returns:
-        list[researcher.Experiment]: All the experiments that were located
+        list[Experiment]: All the experiments that were located
         in the given directory.
     """
     experiments = []
@@ -111,7 +114,7 @@ def past_experiment_from_hash(path, hash_segment):
         located.
 
     Returns:
-        researcher.Experiment: The experiment that matches hash_segment.
+        Experiment: The experiment that matches hash_segment.
     """
     if len(hash_segment) < 8:
         raise ValueError("Hash segment {} must be at least 8 characters long to avoid ambiguity".format(hash_segment))
@@ -139,7 +142,7 @@ def past_experiments_from_hashes(path, hash_segments):
         experiments.
 
     Returns:
-        list[researcher.Experiment]: All experiments that were located 
+        list[Experiment]: All experiments that were located 
         that match one of the given hashes.
     """
     return [past_experiment_from_hash(path, h) for h in hash_segments]
@@ -152,7 +155,7 @@ def load_experiment(path, name):
         name (string): The full filename of the experiment record.
 
     Returns:
-        researcher.Experiment: The data associated with that experiment
+        Experiment: The data associated with that experiment
         including the experiment parameters and results.
     """
     file_name = path + name

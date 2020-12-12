@@ -1,3 +1,6 @@
+"""Contains global constants and nothing else.
+"""
+
 RESULTS_NAME = "results"
 FOLD_RESULTS_NAME = "fold_results"
 GENERAL_RESULTS_NAME = "general_results"
