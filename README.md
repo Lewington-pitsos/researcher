@@ -73,7 +73,7 @@ final_results = {}
 for key, values in results.history.items():
     final_results[key] = values
 
-rs.record_experiment(params, "records/", general_results=final_results)
+rs.record_experiment(params, "records/", observations=final_results)
 ```
 
 The parameters and results will be saved into a `.json` file in the `records/` directory and given a unique experiment hash that can later be used to identify it (though a `"title"` key is also helpful).
@@ -131,7 +131,7 @@ You can also use some pre-built plotting functions to visualize these experiment
 
 ```python
 def plot_metric(e, metric):
-    plt.plot(e.data["results"]["general_results"][metric])
+    plt.plot(e.data["observations"][metric])
 
 plot_metric(experiments[0], "loss")
 plot_metric(experiments[0], "val_loss")

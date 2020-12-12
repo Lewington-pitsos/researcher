@@ -105,8 +105,7 @@ class ObservationCollector(Observations):
         the specified field in the specified fold.
 
         Args:
-            fold (int): The fold to add data to (usually the current 
-            fold).
+            fold (int): The fold to add data to.
 
             key (string): The name of the data being logged, e.g.:
             "f1_score" or  "loss".
@@ -118,7 +117,6 @@ class ObservationCollector(Observations):
             raise ValueError(f"Cannot add fold data to {key}, since this key is already being used to store non-fold related observations")
 
         self.__add_fold(fold, key)
-
         for value in values:
             self.__add_fold_value(fold, key, value)
 
