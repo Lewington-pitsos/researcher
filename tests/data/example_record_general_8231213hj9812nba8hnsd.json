@@ -1,6 +1,6 @@
 {
     "title": "test",
-    "notes": " some human readable sentence",
+    "description": " some human readable sentence",
     "experiment": "linear_reg",
     "data_name": "data/train.csv",
     "folds": 5,
@@ -15,28 +15,26 @@
         "meter_reading"
     ],
     "timestamp": "2020-07-11_12:48:55",
+    "hash": "8231213hj9812nba8hnsd",
     "observations": {
         "mse": [
             [
-                0.45,
-                0.78
+                18899806900.366104
             ],
             [
-                0.89,
-                0.11
+                65922637417.14631
             ],
             [
-                0.33,
-                0.21
+                29483771984.313713
             ],
             [
-                0.22,
-                0.09
+                73728779.50177501
             ],
             [
-                1.03,
-                0.72
+                3029002638.4022694
             ]
-        ]
+        ],
+        "flange_loss": 0.44,
+        "accuracy": 0.87
     }
 }

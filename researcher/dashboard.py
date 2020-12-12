@@ -2,33 +2,26 @@ import matplotlib.pyplot as plt
 
 from researcher.fileutils import *
 
-def display_results(record_path, hash_segment, metric):
-    """Locates a record and prints the average score recorded for the 
-    given metric and plots the score for that metric for each fold in 
-    that record.
-
-    Args:
-        record_path (string): The relative path where the record we want 
-        to display information about is located.
-
-        hash_segment (string): At least 8 consecutive characters from the 
-        unique hash of the record we want to display information about.
-        
-        metric (string): The name of the metric we want to display. 
-
-    Returns:
-        researcher.Experiment: The experiment from the given record 
-        directory that contains the given hash segment.
-    """
-    e = past_experiment_from_hash(record_path, hash_segment)
-    _, ax = plt.subplots()
-
-    print(np.mean(e.get_observations(metric)))
-
-    for fold in e.get_observations(metric):
-        ax.scatter(0, np.array(fold))
+def final_compare(experiments, metrics, draw_plots=False, **kwargs):
+    if draw_plots:
+        fig, axes = plt.subplots(len(metrics), **kwargs)
     
-    return e
+    for i, metric in enumerate(metrics):  
+        print("\n" + metric)
+        for e in experiments:
+            if e.has_observation(metric):
+                scores = e.final_observations(metric)
+                labels = [f"fold_{i}" for i in range(len(scores))]
+                scores += [np.mean(scores)]
+                labels += ["mean"]
+                if draw_plots:
+                    axes[i].plot(labels, scores[:])
+                print( "mean", scores[-1], e.identifier())
+        if draw_plots:
+            axes[i].grid()
+    
+    if draw_plots:
+        fig.legend([e.identifier() for e in experiments])
 
 def plot_compare(experiments, metrics, **kwargs):
     """For each experiment and for each metric, prints the fold-averaged 
@@ -42,12 +35,14 @@ def plot_compare(experiments, metrics, **kwargs):
         experiments on. 
     """
     fig, axes = plt.subplots(len(metrics), **kwargs)
+    if not isinstance(axes, list):
+        axes = [axes]
     
     for i, metric in enumerate(metrics):  
         print("\n" + metric)
         for e in experiments:
-            if e.has_metric(metric):
-                scores = e.get_final_metric_values(metric)
+            if e.has_observation(metric):
+                scores = e.final_observations(metric)
                 labels = [f"fold_{i}" for i in range(len(scores))]
                 scores += [np.mean(scores)]
                 labels += ["mean"]
@@ -57,12 +52,12 @@ def plot_compare(experiments, metrics, **kwargs):
             
     fig.legend([e.identifier() for e in experiments])
 
-def plot_lr(e, metric, n_increases=3):
+def plot_lr(e, metric, lr_name, n_increases=3):
     """Plots the progression of the metric score over the course of the 
-    given experiment. This is primarily used to help estimate an 
-    appropriate learning rate for a given model architecture. Additional
-    lines and printouts are added where the metric begins to decrease or
-    increase.
+    given experiment, compared to the learning rate. This is primarily 
+    used to help estimate an appropriate learning rate for a given model 
+    architecture. Additional lines and printouts are added where the metric
+    begins to decrease or increase.
 
     Args:
         e (researcher.Experiment): The experiment of interest.
@@ -75,9 +70,8 @@ def plot_lr(e, metric, n_increases=3):
     """
     _, ax = plt.subplots(figsize=(20, 5))
     
-    values = e.get_metric(metric)[0]
-    lr_values = e.get_metric('learning_rate')[0]
-    
+    values = np.mean(e.observations[metric], axis=0)
+    lr_values = np.mean(e.observations[lr_name], axis=0)
     
     ax.plot(values)
     
@@ -137,7 +131,7 @@ def plot_training(es, metrics, **kwargs):
 
     for i, m in enumerate(metrics):
         for e in es:
-            folds = e.get_metric(m)
+            folds = e.observations[m]
             line, = ax[i].plot(np.mean(folds, axis=0))
             line.set_label(f"{e.identifier()} {m}")
         ax[i].legend()
@@ -163,7 +157,7 @@ def plot_folds(es, metrics, **kwargs):
     
     for i, m in enumerate(metrics):
         for e in es:
-            folds = e.get_final_metric_values(m)
+            folds = e.final_observations(m)
             ax[i].scatter([e.identifier()] * len(folds), folds)
         ax[i].grid()
     plt.xticks(rotation=45)

@@ -1,7 +1,5 @@
 from collections import defaultdict
 
-import numpy as np
-
 from researcher.globals import *
 
 class Observations():
@@ -111,18 +109,6 @@ class FinalizedObservations(Observations):
     def __init__(self, observations):
         super().__init__(observations)
 
-    def get_observations(self, name):
-        """Returns the values associated with the specified name.
-
-        Args:
-            name (string): The name of the data to be returned. Often a 
-            metric like "loss" or "accuracy".
-
-        Returns:
-            object: The data associated with the specified name.
-        """
-        return self.observations[name]
-
     def has_observation(self, name):
         """
         Args:
@@ -135,39 +121,36 @@ class FinalizedObservations(Observations):
         """
         return name in self.observations
 
-    def get_final_metric_values(self, name):
-        """Identifies the values in each fold associated with the 
-        specified name and returns the last recorded value for each fold.
+    def final_observations(self, key):
+        """Identifies the values associated with the specified key and
+        returns the last recorded value. If the key is associated with
+        more than one fold, the last values of each fold are returned.
 
         Args:
-            name (string): A name that is expected to be associated with
+            key (string): A name that is expected to be associated with
             some fold-related data collected from the experiment.
 
         Returns:
             object: The last recorded datapoint for the specified name for
             each fold.
+
+        Raises:
+            ValueError: If the specified key is not associated with a list
+            of values.
+
+            ValueError: If the specified key is associated with an empty 
+            list.
         """
-        return [metrics[name][-1] for metrics in self.fold_results]
 
-    def get_fold_aggregated_metric(self, name, agg_fn):
-        """Aggregates the data associated with the specified name over all
-        folds using the specified function and returns the aggregation.
+        values = self.observations[key]
 
-        Args:
-            name (string): A name that is expected to be associated with
-            some fold-related data collected from the experiment.
+        if not isinstance(values, list):
+            raise ValueError(f"expected key {key} to be associated with a list of observations, got {values}")
+        
+        if len(values) == 0:
+            raise ValueError(f"expected key {key} to have some values associated with it, got {values}")
 
-            agg_fn (Callable): A function that can be used to aggregate 
-            numpy arrays.
+        if isinstance(values[0], list):
+            return [fold[-1] for fold in values]
 
-        Returns:
-            numpy.ndarray: The data associated with the specified name 
-            aggregated accross all folds.
-        """
-        fold_wise = []
-        for metrics in self.fold_results:
-            fold_wise.append(metrics[name])
-
-        return agg_fn(np.array(fold_wise), axis=0)
-    
-
+        return values[-1]

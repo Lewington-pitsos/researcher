@@ -5,7 +5,7 @@ import glob
 import researcher as rs
 import numpy as np
 
-from tests.tools import TEST_DATA_PATH, TEST_EXPERIMENT_PATH
+from tests.tools import TEST_EXPERIMENT_PATH
 
 class TestSavingExperiment(unittest.TestCase):  
     def setUp(self):

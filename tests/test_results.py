@@ -6,15 +6,19 @@ from tests.tools import TEST_DATA_PATH
 
 class TestObservationAnalysis(unittest.TestCase):
     def setUp(self):
-        self.e1 = rs.load_experiment(TEST_DATA_PATH, "example_record.json")
-        self.e2 = rs.load_experiment(TEST_DATA_PATH, "example_epoch_record.json")
-        self.e3 = rs.load_experiment(TEST_DATA_PATH, "example_record_general.json")
+        self.e1 = rs.load_experiment(TEST_DATA_PATH, "example_record_28hbsb12bns8612vt26867156.json")
+        self.e2 = rs.load_experiment(TEST_DATA_PATH, "example_epoch_record_sadasd328234g123v213b31271bn.json")
+        self.e3 = rs.load_experiment(TEST_DATA_PATH, "example_record_general_8231213hj9812nba8hnsd.json")
     
     def test_correctly_loads_general_results(self):
         self.assertAlmostEqual(self.e3.observations["flange_loss"], 0.44)
 
+    def test_correctly_returns_fold_metrics(self):
+        self.assertEqual(self.e2.observations["mse"], [[0.45,0.78], [0.89,0.11], [0.33,0.21], [0.22, 0.09], [1.03, 0.72]])
+        self.assertEqual(self.e2.final_observations("mse"), [0.78, 0.11, 0.21, 0.09, 0.72])
+
     def test_correctly_gathers_metric(self):
-        mses = self.e1.get_observations("mse")   
+        mses = self.e1.observations["mse"]   
 
         self.assertEqual(len(mses), 5)
         self.assertEqual(len(mses[0]), 1)
@@ -23,7 +27,7 @@ class TestObservationAnalysis(unittest.TestCase):
         self.assertEqual(len(mses[3]), 1)
         self.assertEqual(len(mses[4]), 1)
 
-        mses = self.e2.get_observations("mse")   
+        mses = self.e2.observations["mse"]   
 
         self.assertEqual(len(mses), 5)
         self.assertEqual(len(mses[0]), 2)

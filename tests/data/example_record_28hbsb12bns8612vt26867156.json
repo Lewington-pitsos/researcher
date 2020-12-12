@@ -1,6 +1,6 @@
 {
     "title": "test",
-    "notes": " some human readable sentence",
+    "description": "this is the first example record",
     "experiment": "linear_reg",
     "data_name": "data/train.csv",
     "folds": 5,
@@ -15,6 +15,7 @@
         "meter_reading"
     ],
     "timestamp": "2020-07-11_12:48:55",
+    "hash": "28hbsb12bns8612vt26867156",
     "observations": {
         "mse": [
             [
@@ -32,8 +33,6 @@
             [
                 3029002638.4022694
             ]
-        ],
-        "flange_loss": 0.44,
-        "accuracy": 0.87
+        ]
     }
 }

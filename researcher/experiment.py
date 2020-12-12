@@ -52,8 +52,5 @@ class Experiment(FinalizedObservations):
         title = self.data["title"] + "_" if "title" in self.data else ""
 
         id = title + self.data["hash"][:8]
-
-        if self.is_trial():
-            id = "trial_" + id
         
         return id
