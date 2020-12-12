@@ -9,7 +9,20 @@ from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_
 from researcher.experiment import Experiment
 
 class TrickyValuesEncoder(json.JSONEncoder):
+    """A JSON Encoder class that handles tricky python datatypes.
+    """
     def default(self, obj):
+        """Converts data types that the json package cannot handle into
+        data types that it can.
+
+        Args:
+            obj (object): a python value that will be serialized by the 
+            json package.
+
+        Returns:
+            object: The same value that was passed in represented as a 
+            data type that the json package can serialize.
+        """
         if isinstance(obj, np.float32):
             return float(obj)
         elif isinstance(obj, np.integer):
@@ -20,9 +33,36 @@ class TrickyValuesEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 def get_hash(params):
+    """Converts the given parameters deterministically into a unique hash. 
+
+    Args:
+        params (dict): The parameters that define an experiment.
+
+    Returns:
+        string: A hash that is deterministically generated from and unique
+        to the given parameters.
+    """
     return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params, cls=TrickyValuesEncoder).encode("utf-8")).digest()), 16))[2:]
 
 def save_experiment(path, name, parameters, fold_results=None, general_results=None):
+    """Saves parameters and associated experimental results to a JSON 
+    file.
+
+    Args:
+        path (string): The parent directory in which to save the record.
+
+        name (string): A short, somewhat human readable summary of the 
+        experiment that is being saved.
+
+        parameters (dict): The parameters that define the experimental 
+        conditions of the experiment.
+
+        fold_results (dict, optional): The fold-wise results of the 
+        experiment. Defaults to None.
+        
+        general_results (dict, optional): The results of the experiment 
+        that are not related to a particular fold. Defaults to None.
+    """
     file_name = path + name + ".json"
 
     result_dict = {}
@@ -36,6 +76,16 @@ def save_experiment(path, name, parameters, fold_results=None, general_results=N
         f.write(json.dumps(experiment_dict, indent=4, cls=TrickyValuesEncoder))
 
 def all_experiments(path):
+    """Loads all records in the given directory into Experiment instances.
+
+    Args:
+        path (string): The directory to search for experiment records to 
+        load.
+
+    Returns:
+        list[researcher.Experiment]: All the experiments that were located
+        in the given directory.
+    """
     experiments = []
     for file in os.listdir(path):
         if file[-5:] == ".json":
@@ -44,6 +94,25 @@ def all_experiments(path):
     return sorted(experiments, key=lambda x: x.timestamp)
 
 def past_experiment_from_hash(path, hash_segment):
+    """Loads and returns the experiment which matches the given hash.
+
+    Args:
+        path (string): The directory to search for experiments in.
+
+        hash_segment (string): At least 8 consecutive characters from the
+        unique identifier hash of the sought experiment. 
+
+    Raises:
+        ValueError: If hash_segment is less than 8 characters long.
+        ValueError: If more than one experiment that matches hash_segment
+        was located.
+
+        ValueError: If no experiments that match hash_segment were 
+        located.
+
+    Returns:
+        researcher.Experiment: The experiment that matches hash_segment.
+    """
     if len(hash_segment) < 8:
         raise ValueError("Hash segment {} must be at least 8 characters long to avoid ambiguity".format(hash_segment))
 
@@ -62,9 +131,30 @@ def past_experiment_from_hash(path, hash_segment):
     return load_experiment(path, experiment_name)
 
 def past_experiments_from_hashes(path, hash_segments):
+    """Loads all experiments that match one of the given hashes.
+
+    Args:
+        path (string): The directory to search for experiments in.
+        hash_segments (list[string]): Hashes that uniquely identify sought
+        experiments.
+
+    Returns:
+        list[researcher.Experiment]: All experiments that were located 
+        that match one of the given hashes.
+    """
     return [past_experiment_from_hash(path, h) for h in hash_segments]
 
 def load_experiment(path, name):
+    """Loads and returns the data for an experiment.
+
+    Args:
+        path (string): The directory containing the experiment record.
+        name (string): The full filename of the experiment record.
+
+    Returns:
+        researcher.Experiment: The data associated with that experiment
+        including the experiment parameters and results.
+    """
     file_name = path + name
 
     if file_name[-5:] != ".json":
