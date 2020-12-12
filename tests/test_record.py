@@ -22,7 +22,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ResultBuilder()
+        res = rs.ObservationBuilder()
 
         for i in range(3):
             for j in range(1, 8):
@@ -41,7 +41,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ResultBuilder()
+        res = rs.ObservationBuilder()
 
         for i in range(3):
             for j in range(1, 8):
@@ -72,7 +72,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ResultBuilder()
+        res = rs.ObservationBuilder()
 
         for i in range(3):
             for j in range(1, 8):

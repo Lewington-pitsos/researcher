@@ -5,7 +5,7 @@ import hashlib
 import math
 
 import numpy as np
-from researcher.globals import RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_NAME
+from researcher.globals import OBSERVATIONS_NAME
 from researcher.experiment import Experiment
 
 class TrickyValuesEncoder(json.JSONEncoder):
@@ -44,7 +44,7 @@ def get_hash(params):
     """
     return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params, cls=TrickyValuesEncoder).encode("utf-8")).digest()), 16))[2:]
 
-def save_experiment(path, name, parameters, fold_results=None, general_results=None):
+def save_experiment(path, name, parameters, observations):
     """Saves parameters and associated experimental results to a JSON 
     file.
 
@@ -57,20 +57,12 @@ def save_experiment(path, name, parameters, fold_results=None, general_results=N
         parameters (dict): The parameters that define the experimental 
         conditions of the experiment.
 
-        fold_results (dict, optional): The fold-wise results of the 
-        experiment. Defaults to None.
-        
-        general_results (dict, optional): The results of the experiment 
-        that are not related to a particular fold. Defaults to None.
+        observations (dict, optional): All observations made during the
+        experiment.
     """
     file_name = path + name + ".json"
 
-    result_dict = {}
-    experiment_dict = {**parameters, RESULTS_NAME: result_dict}
-    if fold_results is not None:
-        result_dict[FOLD_RESULTS_NAME] = fold_results
-    if general_results is not None:
-        result_dict[GENERAL_RESULTS_NAME] = general_results
+    experiment_dict = {**parameters, OBSERVATIONS_NAME: observations}
 
     with open(file_name, "w") as f:
         f.write(json.dumps(experiment_dict, indent=4, cls=TrickyValuesEncoder))

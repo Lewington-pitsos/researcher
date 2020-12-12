@@ -23,9 +23,9 @@ def display_results(record_path, hash_segment, metric):
     e = past_experiment_from_hash(record_path, hash_segment)
     _, ax = plt.subplots()
 
-    print(np.mean(e.get_metric(metric)))
+    print(np.mean(e.get_observations(metric)))
 
-    for fold in e.get_metric(metric):
+    for fold in e.get_observations(metric):
         ax.scatter(0, np.array(fold))
     
     return e

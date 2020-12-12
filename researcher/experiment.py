@@ -1,19 +1,13 @@
 import datetime
 
-from researcher.globals import DATE_FORMAT, RESULTS_NAME, GENERAL_RESULTS_NAME, FOLD_RESULTS_NAME
-from researcher.results import FinalizedResults
+from researcher.globals import DATE_FORMAT, OBSERVATIONS_NAME
+from researcher.observations import FinalizedObservations
 
-class Experiment(FinalizedResults):
+class Experiment(FinalizedObservations):
     """Contains all the data related to a single recorded experiment.
 
     Attributes:
-        fold_results (dict): The per-fold results of the recorded 
-        experiment, assuming the experiment in question involved folds.
-
-        general_results (dict): Any additional results related to the 
-        recorded experiment that are not related to any particular fold.
-
-        data (dict): All information, results as well as parameters, 
+        data (dict): All information, observations as well as parameters, 
         associated with the recorded experiment.
 
         timestamp: (datetime.datetime) The time at which the recorded 
@@ -24,21 +18,19 @@ class Experiment(FinalizedResults):
 
         Args:
             data (dict): all recorded data relating to an experiment. This
-            includes experimental parameters as well as results.
+            includes experimental parameters as well as observations.
         """
-        if RESULTS_NAME in data:
-            results = data[RESULTS_NAME]
-
-            fold_results = results[FOLD_RESULTS_NAME] if FOLD_RESULTS_NAME in results else None
-            general_results = results[GENERAL_RESULTS_NAME] if GENERAL_RESULTS_NAME in results else None
+        if OBSERVATIONS_NAME in data:
+            observations = data[OBSERVATIONS_NAME]
         else:
-            fold_results = None
-            general_results = None
+            observations = {}
 
-        super().__init__(fold_results, general_results)
+        super().__init__(observations)
         
         self.data = data
-        self.timestamp = datetime.datetime.strptime(self.data["timestamp"], DATE_FORMAT)
+
+        self.timestamp = datetime.datetime.strptime(self.data["timestamp"], DATE_FORMAT) if "timestamp" in self.data else None
+        
 
     def get_hash(self):
         """Returns the unique identifier of the given experiment.
