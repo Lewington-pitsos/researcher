@@ -44,7 +44,7 @@ def get_hash(params):
     return hex(int(binascii.hexlify(hashlib.md5(json.dumps(params, cls=TrickyValuesEncoder).encode("utf-8")).digest()), 16))[2:]
 
 def save_experiment(path, name, parameters, observations):
-    """Saves parameters and associated experimental results to a JSON 
+    """Saves parameters and associated experiment observations to a JSON 
     file.
 
     Args:
@@ -144,7 +144,7 @@ def load_experiment(path, name):
 
     Returns:
         researcher.Experiment: The data associated with that experiment
-        including the experiment parameters and results.
+        including the experiment parameters and observations.
     """
     file_name = path + name
 

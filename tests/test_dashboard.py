@@ -13,7 +13,7 @@ class TestDashboard(unittest.TestCase):
         self.e2 = past_experiment_from_hash(TEST_DATA_PATH, "6576g326g7112")
         self.e3 = past_experiment_from_hash(TEST_DATA_PATH, "7y2137h78123hhabsd8")
 
-    def test_display_results(self):
+    def test_display_final_observations(self):
 
         final_compare([self.e], ["mse"])
         final_compare([self.e, self.e2], ["mse"])

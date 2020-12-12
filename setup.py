@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.34",
     author="Louka Ewington-Pitsos",
     author_email="lewingtonpitsos@gmail.com",
-    description="A tool for recording the results of data science experiments",
+    description="A tool for recording and analysing data science experiments",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Lewington-pitsos/researcher",

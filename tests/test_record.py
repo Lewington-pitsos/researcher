@@ -22,13 +22,13 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ObservationBuilder()
+        res = rs.ObservationCollector()
 
         for i in range(3):
             for j in range(1, 8):
                 res.add_fold_observation(i, "rmse", 0.98 / j)
 
-        rs.record_experiment_with_result_builder(params, TEST_EXPERIMENT_PATH, res)
+        rs.record_experiment_with_collector(params, TEST_EXPERIMENT_PATH, res)
 
         self.assertTrue(os.path.isfile(TEST_EXPERIMENT_PATH + "cool_experiment_d45dee5991986a5b8215706f5e904b3e.json"))
 
@@ -41,7 +41,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ObservationBuilder()
+        res = rs.ObservationCollector()
 
         for i in range(3):
             for j in range(1, 8):
@@ -72,7 +72,7 @@ class TestSavingExperiment(unittest.TestCase):
             "model": "rnn",
         }
 
-        res = rs.ObservationBuilder()
+        res = rs.ObservationCollector()
 
         for i in range(3):
             for j in range(1, 8):

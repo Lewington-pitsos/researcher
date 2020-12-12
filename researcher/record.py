@@ -1,7 +1,7 @@
 import datetime
 import os
 import copy
-from researcher.observations import ObservationBuilder
+from researcher.observations import ObservationCollector
 
 
 from researcher.fileutils import *
@@ -20,51 +20,49 @@ def reduced_params(params, unwanted_keys):
         dict: A copy of the original parameters minus the selected keys.
     """
 
-
     if not isinstance(unwanted_keys, set):
         unwanted_keys = set(unwanted_keys)
 
     return {k: params[k] for k in params.keys() - unwanted_keys}
 
-
-def record_experiment_with_result_builder(params, save_path, result_builder=None, duration=None):
-    """Saves the experiment parameters and results by unpacking those 
-    results from a researcher.ResultBuilder instance.
+def record_experiment_with_collector(params, save_path, collector=None, duration=None):
+    """Saves the experiment parameters and observations by unpacking those 
+    observations from a researcher.ObservationCollector instance.
 
     Args:
         params (dict): The parameters that define the experimental 
         conditions of the experiment.
 
         save_path (string): The parent directory in which to save 
-        experimental results.
+        experimental observations.
         
-        result_builder (researcher.ResultBuilder, optional): An object 
-        which contains the results observed from running the experiment.
+        collector (researcher.ObservationCollector, optional): An object 
+        which contains the observations collected during the experiment.
         Defaults to None.
 
         duration (datetime.timedelta, optional): The time elapsed between
         the start and the end of the experiment. Defaults to None.
     """
-    observations = result_builder.observations if result_builder is not None else None
+    observations = collector.observations if collector is not None else None
 
     record_experiment(params, save_path, observations, duration)
 
 def record_experiment(params, save_path, observations=None, duration=None):
-    """Saves the parameters and associated experimental results to a JSON
-    experiment record.
+    """Saves the parameters and associated experiment observations to a 
+    JSON experiment record.
 
     Args:
         params (dict): The parameters that define the experimental 
         conditions of the experiment.
 
         save_path (string): The parent directory in which to save 
-        experimental results.
+        experiment observations.
 
-        fold_results (dict, optional): The fold-wise results of the 
-        experiment. Defaults to None.
-        
         observations (dict, optional): The observations made during the
         experiment. Defaults to None.
+
+        duration (datetime.timedelta, optional): The time elapsed between
+        the start and the end of the experiment. Defaults to None.
     """
     if not os.path.isdir(save_path):
         os.mkdir(save_path)

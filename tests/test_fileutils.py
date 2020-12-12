@@ -37,7 +37,7 @@ class TestFileUtils(unittest.TestCase):
 
         self.assertDictEqual(saved, expected)
 
-    def test_saves_general_results_correctly(self):
+    def test_saves_non_fold_observations_correctly(self):
         params = {"a": 4, "b": 8, "c": [5, 6, 7]}
         expected = {"a": 4, "b": 8, "c": [5, 6, 7], "observations": {"loss": [0.1, 0.4, 0.231]}}
 

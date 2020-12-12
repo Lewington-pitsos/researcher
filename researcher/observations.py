@@ -12,8 +12,8 @@ class Observations():
     def __init__(self, observations=None):
         self.observations = observations if observations else {}
 
-class ObservationBuilder(Observations):
-    """Makes the task of gathering and saving experiment results easier.
+class ObservationCollector(Observations):
+    """Makes the task of collecting experiment observations easier.
     """
     def __init__(self):
         super().__init__(None)
@@ -21,22 +21,22 @@ class ObservationBuilder(Observations):
         self.__fold_data = set()
         self.__non_fold_data = set()
 
-    def __add_fold_value(self, fold, name, value):
-        self.observations[name][fold].append(value)
+    def __add_fold_value(self, fold, key, value):
+        self.observations[key][fold].append(value)
 
-    def __add_fold(self, fold, name):
-        if not name in self.observations:
-            self.observations[name] = []
-            self.__fold_data.add(name)
+    def __add_fold(self, fold, key):
+        if not key in self.observations:
+            self.observations[key] = []
+            self.__fold_data.add(key)
         
-        while len(self.observations[name]) <= fold:
-            self.observations[name].append([])
+        while len(self.observations[key]) <= fold:
+            self.observations[key].append([])
 
     def set_observation(self, key, value):
         """Stores the specified values under the specified key. 
 
         Args:
-            name (string): The type of data being logged, e.g.: "f1_score"
+            key (string): The type of data being logged, e.g.: "f1_score"
             or  "loss". 
 
             value (object): The observations to store under the given key.
@@ -54,20 +54,19 @@ class ObservationBuilder(Observations):
         """Appends the given value to the list of values associated with 
         the specified field in the specified fold. For instance, you might
         call this method to continuously add datapoints to the accuracy 
-        metric for each fold as training progresses. You cannot add a name
-        to the fold results if it already exists in general results or
-        vise versa.
+        metric for each fold as training progresses. You cannot add fold
+        data to a key if it already holds non-fold data.
 
         Args:
             fold (int): The fold to add data to. The first fold is fold 0.
 
-            name (string): The name of the data being logged, e.g.:
+            key (string): The name of the data being logged, e.g.:
             "f1_score" or  "loss". 
 
             value (object): The next value to add to the data for this 
             fold. Usually a float.
         Raises:
-            ValueError: If the specified name is already storing non-fold
+            ValueError: If the specified key is already storing non-fold
             related observations.
 
         """
@@ -77,7 +76,7 @@ class ObservationBuilder(Observations):
         self.__add_fold(fold, key)
         self.__add_fold_value(fold, key, value)
 
-    def add_multiple(self, fold, name, values):
+    def add_multiple(self, fold, key, values):
         """Appends multiple values to the list of values associated with 
         the specified field in the specified fold.
 
@@ -85,23 +84,16 @@ class ObservationBuilder(Observations):
             fold (int): The fold to add data to (usually the current 
             fold).
 
-            name (string): The name of the data being logged, e.g.:
+            key (string): The name of the data being logged, e.g.:
             "f1_score" or  "loss".
 
             values (list[object]): The next values to add to the data for this 
             fold. Usually a list of floats.
         """
-        self.__add_fold(fold, name)
+        self.__add_fold(fold, key)
 
         for value in values:
-            self.__add_fold_value(fold, name, value)
-
-    def active_fold(self):
-        """
-        Returns:
-            int: The index of the highest fold added to so far.
-        """
-        return len(self.fold_results) - 1
+            self.__add_fold_value(fold, key, value)
 
 class FinalizedObservations(Observations):
     """Observations loaded from an already completed experiment. 
@@ -109,17 +101,17 @@ class FinalizedObservations(Observations):
     def __init__(self, observations):
         super().__init__(observations)
 
-    def has_observation(self, name):
+    def has_observation(self, key):
         """
         Args:
-            name (string): A name that is expected to be associated with
+            key (string): A name that is expected to be associated with
             some data collected from the experiment.
 
         Returns:
             bool: An indicator of whether there is any data associated with the 
-            specified name stored in the experiment results.
+            specified key stored in the experiment observations.
         """
-        return name in self.observations
+        return key in self.observations
 
     def final_observations(self, key):
         """Identifies the values associated with the specified key and

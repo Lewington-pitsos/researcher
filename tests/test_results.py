@@ -10,7 +10,7 @@ class TestObservationAnalysis(unittest.TestCase):
         self.e2 = rs.load_experiment(TEST_DATA_PATH, "example_epoch_record_sadasd328234g123v213b31271bn.json")
         self.e3 = rs.load_experiment(TEST_DATA_PATH, "example_record_general_8231213hj9812nba8hnsd.json")
     
-    def test_correctly_loads_general_results(self):
+    def test_correctly_loads_general_observations(self):
         self.assertAlmostEqual(self.e3.observations["flange_loss"], 0.44)
 
     def test_correctly_returns_fold_metrics(self):
@@ -37,7 +37,7 @@ class TestObservationAnalysis(unittest.TestCase):
         self.assertEqual(len(mses[4]), 2)
 
     def test_prevents_fold_metrics_with_general_metric_names(self):
-        rb = rs.ObservationBuilder()
+        rb = rs.ObservationCollector()
         rb.set_observation("loss", 0.5)
 
         self.assertRaises(ValueError, rb.add_fold_observation, 0, "loss", 0.5)
@@ -47,7 +47,7 @@ class TestObservationAnalysis(unittest.TestCase):
         rb.add_fold_observation(0, "fold_loss", 0.5)
 
     def test_prevents_general_metrics_with_fold_metric_names(self):
-        rb = rs.ObservationBuilder()
+        rb = rs.ObservationCollector()
 
         rb.add_fold_observation(0, "loss", 0.5)
         rb.add_fold_observation(0, "loss", 0.2)
@@ -60,7 +60,7 @@ class TestObservationAnalysis(unittest.TestCase):
         rb.set_observation("general_loss", 0.5)
 
     def test_prevents_general_metrics_being_overwritten(self):
-        rb = rs.ObservationBuilder()
+        rb = rs.ObservationCollector()
         rb.set_observation("loss", 0.5)
         self.assertRaises(ValueError, rb.set_observation, "loss", 0.5)
         self.assertRaises(ValueError, rb.set_observation, "loss", 0.2)
