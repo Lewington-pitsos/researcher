@@ -64,6 +64,16 @@ class ObservationCollector(Observations):
         self.__non_fold_data.add(key)
         self.observations[key] = value
 
+    def set_observations(self, obs_dict):
+        """Stores the whole dictionary of data as experiment observations.
+
+        Args:
+            obs_dict (dict): A dictionatry containing data collected 
+            during an experiment.
+        """
+        for key, value in obs_dict.items():
+            self.set_observation(key, value)
+
     def add_fold_observation(self, fold, key, value):
         """Appends the given value to the list of values associated with 
         the specified field in the specified fold. For instance, you might
@@ -90,7 +100,7 @@ class ObservationCollector(Observations):
         self.__add_fold(fold, key)
         self.__add_fold_value(fold, key, value)
 
-    def add_multiple(self, fold, key, values):
+    def add_fold_observations(self, fold, key, values):
         """Appends multiple values to the list of values associated with 
         the specified field in the specified fold.
 
@@ -104,6 +114,9 @@ class ObservationCollector(Observations):
             values (list[object]): The next values to add to the data for this 
             fold. Usually a list of floats.
         """
+        if key in self.__non_fold_data:
+            raise ValueError(f"Cannot add fold data to {key}, since this key is already being used to store non-fold related observations")
+
         self.__add_fold(fold, key)
 
         for value in values:
