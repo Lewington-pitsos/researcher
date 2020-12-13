@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from researcher.globals import *
 
 class Observations():
@@ -7,7 +5,6 @@ class Observations():
 
     Attributes:
         observations (dict, optional): All observations made during the experiment.
-
     """
     def __init__(self, observations=None):
         self.observations = observations if observations else {}
@@ -92,7 +89,6 @@ class ObservationCollector(Observations):
         Raises:
             ValueError: If the specified key is already storing non-fold
             related observations.
-
         """
         if key in self.__non_fold_data:
             raise ValueError(f"Cannot add fold data to {key}, since this key is already being used to store non-fold related observations")
@@ -158,7 +154,6 @@ class FinalizedObservations(Observations):
             ValueError: If the specified key is associated with an empty 
             list.
         """
-
         values = self.observations[key]
 
         if not isinstance(values, list):

@@ -28,9 +28,9 @@ def run_experiment(params):
         metrics=['accuracy'],
     )
     model.fit(
-        ds_train,
+        SOME_DATASET,
         epochs=params["epochs"],
-        validation_data=SOME_DATASET, 
+        validation_data=SOME_OTHER_DATASET, 
     )
     
     return model.history

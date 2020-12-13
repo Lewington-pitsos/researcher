@@ -53,6 +53,7 @@ def plot_compare(experiments, metrics, **kwargs):
         metrics (list[string]): The metrics to compare the given 
         experiments on. 
     """
+    
     fig, axes = plt.subplots(len(metrics), **kwargs)
     if not isinstance(axes, list):
         axes = [axes]

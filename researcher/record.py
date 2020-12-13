@@ -4,7 +4,6 @@
 import datetime
 import os
 import copy
-from researcher.observations import ObservationCollector
 
 from researcher.fileutils import *
 from researcher.globals import *
@@ -21,7 +20,6 @@ def reduced_params(params, unwanted_keys):
     Returns:
         dict: A copy of the original parameters minus the selected keys.
     """
-
     if not isinstance(unwanted_keys, set):
         unwanted_keys = set(unwanted_keys)
 
