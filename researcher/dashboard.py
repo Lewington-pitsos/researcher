@@ -176,8 +176,14 @@ def plot_folds(es, metrics, **kwargs):
         ax = [ax]
     
     for i, m in enumerate(metrics):
+        means = []
+        mean_labels = []
         for e in es:
             folds = e.final_observations(m)
             ax[i].scatter([e.identifier()] * len(folds), folds)
+            means.append(np.mean(folds))
+            mean_labels.append(e.identifier())
+        
+        ax[i].plot(mean_labels, means)
         ax[i].grid()
     plt.xticks(rotation=45)

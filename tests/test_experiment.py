@@ -8,8 +8,8 @@ import researcher as rs
 from tests.tools import TEST_DATA_PATH
 
 class TestExperiment(unittest.TestCase):
-    def test_records_observations_correctly(self):
-        data = {
+    def setUp(self) -> None:
+        self.mse_experiment = {
             "title": "test",
             "description": "this is the first example record",
             "experiment": "linear_reg",
@@ -48,6 +48,66 @@ class TestExperiment(unittest.TestCase):
             }
         }
 
+    def test_returns_correct_number_of_folds(self):
+        e = Experiment(self.mse_experiment)
+
+        self.assertEqual(e.n_folds(), 5)
+
+        self.mse_experiment["observations"] = {
+            "mse": [
+                [0.877], 
+                [0.877], 
+                [0.877],
+            ],
+            "rmse": [
+                [0.877, 0.99],
+                [0.877, 0.99],
+                [0.877, 0.99],
+            ] 
+        }
+        e = Experiment(self.mse_experiment)
+        self.assertEqual(e.n_folds(), 3)
+
+        self.mse_experiment["observations"] = {
+            "mse": [
+                [0.877], 
+                [0.877], 
+                [0.877],
+            ],
+            "rmse": [
+                [0.877, 0.99],
+                [0.877, 0.99],
+                [0.877, 0.99],
+            ],
+            "final_score": [0.88, 0.88],
+            "final_score2": 0.88
+        }
+        e = Experiment(self.mse_experiment)
+        self.assertEqual(e.n_folds(), 3)
+
+    def test_returns_correct_number_of_folds_no_obs(self):
+        self.mse_experiment["observations"] = {}
+        e = Experiment(self.mse_experiment)
+
+        self.assertEqual(e.n_folds(), 0)
+
+
+    def test_returns_correct_number_of_folds_non_fold_obs(self):
+        self.mse_experiment["observations"] = {
+            "final_score": 0.877 
+        }
+        e = Experiment(self.mse_experiment)
+        self.assertEqual(e.n_folds(), 0)
+
+        self.mse_experiment["observations"] = {
+            "final_scores": [0.877, 0.987, 0.363] 
+        }
+        e = Experiment(self.mse_experiment)
+        self.assertEqual(e.n_folds(), 0)
+
+    def test_records_observations_correctly(self):
+
+
         expected_observations = {
                 "mse": [
                     [
@@ -68,6 +128,6 @@ class TestExperiment(unittest.TestCase):
                 ]
             }
 
-        e = Experiment(data)
+        e = Experiment(self.mse_experiment)
 
         self.assertEqual(e.observations, expected_observations)

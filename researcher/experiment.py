@@ -30,10 +30,25 @@ class Experiment(FinalizedObservations):
         self.data = data
 
         self.timestamp = datetime.datetime.strptime(self.data["timestamp"], DATE_FORMAT) if "timestamp" in self.data else None
+    
+    def n_folds(self):
+        """Returns the number of folds that the experiment has.
+        Returns:
+            int: the number of folds that the experiment has.
+        """
+
+        max_folds = 0
+
+        # we assume any observation that takes the form of a list of lists
+        # represents seprate folds of data.
+        for val in self.observations.values():
+            if isinstance(val, list) and all([isinstance(x, list) for x in val]) and len(val) > max_folds:
+                 return len(val)
         
+        return max_folds
 
     def get_hash(self):
-        """Returns the unique identifier of the given experiment.
+        """Returns the unique identifier of the experiment.
 
         Returns:
             string: The unique identifier for this experiment.

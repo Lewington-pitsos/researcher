@@ -1,5 +1,8 @@
 # Researcher
 
+"I walk slowly, but I never walk backward."
+    - Abraham Lincon
+
 Researcher makes it easier for data science practitioners to record and reproduce the results of their data science experiments. Conceptually `researcher` breaks the data science process into distinct **experiments**. Each experiment has **parameters** (number of training epochs, dataset used, model architecture, etc.) which differentiate it from other experiments, and **results** (final validation loss, lowest training accuracy, etc.) which are the observations made when an experiment was run. 
 
 The idea behind researcher is that for every experiment you run, you should record both the parameters involved and the results they achieved. This will make it easier to analyse complex interactions between different parameters and re-create experimental conditions at a later date.
