@@ -1,3 +1,4 @@
+from numpy.lib.arraysetops import isin
 from researcher.globals import *
 
 class Observations():
@@ -148,17 +149,14 @@ class FinalizedObservations(Observations):
             each fold.
 
         Raises:
-            ValueError: If the specified key is not associated with a list
-            of values.
-
             ValueError: If the specified key is associated with an empty 
             list.
         """
         values = self.observations[key]
-
-        if not isinstance(values, list):
-            raise ValueError(f"expected key {key} to be associated with a list of observations, got {values}")
         
+        if not isinstance(values, list):
+            return values
+
         if len(values) == 0:
             raise ValueError(f"expected key {key} to have some values associated with it, got {values}")
 
