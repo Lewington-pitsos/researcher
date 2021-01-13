@@ -3,6 +3,7 @@ and comparing recorded experiments to one another.
 """
 
 import matplotlib.pyplot as plt
+from numpy.lib.arraysetops import isin
 
 from researcher.fileutils import *
 
@@ -181,7 +182,12 @@ def plot_folds(es, metrics, **kwargs):
         for e in es:
             folds = e.final_observations(m)
             ax[i].scatter([e.identifier()] * len(folds), folds)
-            means.append(np.mean(folds))
+
+            if isinstance(folds, list):
+                means.append(np.mean(folds))
+            else:
+                means.append(folds)
+                
             mean_labels.append(e.identifier())
         
         ax[i].plot(mean_labels, means)
