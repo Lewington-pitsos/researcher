@@ -158,7 +158,7 @@ def plot_training(es, metrics, **kwargs):
         ax[i].legend()
         ax[i].grid()
 
-def plot_folds(es, metrics, **kwargs):
+def plot_folds(es, metrics, xlabel=None, ylabel=None, **kwargs):
     """For each metric, the final values of each fold of each of the given
     experiments will be plotted on a scatter graph.
 
@@ -181,15 +181,21 @@ def plot_folds(es, metrics, **kwargs):
         mean_labels = []
         for e in es:
             folds = e.final_observations(m)
+            if not isinstance(folds, list):
+                folds =[folds]
+
             ax[i].scatter([e.identifier()] * len(folds), folds)
 
-            if isinstance(folds, list):
-                means.append(np.mean(folds))
-            else:
-                means.append(folds)
-                
+            means.append(np.mean(folds))
+
             mean_labels.append(e.identifier())
         
         ax[i].plot(mean_labels, means)
         ax[i].grid()
+        
+        if xlabel is not None:
+            ax[i].set_xlabel(xlabel)
+        if ylabel is not None:
+            ax[i].set_ylabel(ylabel)
+        
     plt.xticks(rotation=45)
