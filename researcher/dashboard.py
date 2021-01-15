@@ -115,7 +115,7 @@ def plot_lr(e, metric, lr_name, n_increases=3):
             first_increase_index = i + start_index + 1
             
             print("loss began to increase at: ", first_increase_index)
-            print("corresponding lr: ", round(lr_values[first_increase_index], 6))
+            print("corresponding lr: ", lr_values[first_increase_index], 6)
             plt.plot([first_increase_index, first_increase_index], [np.max(values), np.min(values)])
 
             n_increases-= 1
@@ -127,10 +127,10 @@ def plot_lr(e, metric, lr_name, n_increases=3):
     plt.plot([min_index, min_index], [np.max(values), np.min(values)])
     
     print("loss began to decrease at: ", start_index)
-    print("corresponding lr: ", round(lr_values[start_index], 6))
+    print("corresponding lr: ", lr_values[start_index])
     
     print("lowest loss achieved at: ", min_index)
-    print("corresponding lr: ", round(lr_values[min_index], 6))
+    print("corresponding lr: ", lr_values[min_index], 6)
 
 def plot_training(es, metrics, **kwargs):
     """For each given metric, the progression of that metric over all the
