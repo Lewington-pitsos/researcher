@@ -47,6 +47,16 @@ class Experiment(FinalizedObservations):
         
         return max_folds
 
+    def common_values(self, other):
+        """Returns the number of key-value parameter pairs in these two 
+        experiments share in common. This does not include observations.
+        """
+        count = 0
+        for k, v in self.data.items():
+            if k in other.data and other.data[k] == v:
+                count += 1
+        return count
+
     def get_hash(self):
         """Returns the unique identifier of the experiment.
 
