@@ -199,3 +199,31 @@ def plot_folds(es, metrics, xlabel=None, ylabel=None, **kwargs):
             ax[i].set_ylabel(ylabel)
         
     plt.xticks(rotation=45)
+
+
+def plot_fold_training(e, metrics, **kwargs):
+    """For each given metric, the progression of that metric over each fold
+    of the given experiment will be plotted into a line graph.
+
+    Args:
+        e (Experiment): The experiment of intererst.
+
+        metrics (list[string]): The metrics on which to compare the 
+        experiment folds. 
+    """
+
+    if isinstance(e, tuple) or isinstance(e, list) and len(e) == 1:
+        e = e[0]
+
+    _, ax = plt.subplots(len(metrics), **kwargs)
+    
+    if len(metrics) == 1:
+        ax = [ax]
+
+    for i, m in enumerate(metrics):
+        folds = e.observations[m]
+        for j, fold in enumerate(folds):
+            line, = ax[i].plot(fold)
+            line.set_label(f"{j}_{m}")
+        ax[i].legend()
+        ax[i].grid()

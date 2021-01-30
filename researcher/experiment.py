@@ -1,6 +1,6 @@
 import datetime
 
-from researcher.globals import DATE_FORMAT, OBSERVATIONS_NAME
+from researcher.globals import DATE_FORMAT, METADATA_KEYS, OBSERVATIONS_NAME
 from researcher.observations import FinalizedObservations
 
 class Experiment(FinalizedObservations):
@@ -48,12 +48,24 @@ class Experiment(FinalizedObservations):
         return max_folds
 
     def common_values(self, other):
-        """Returns the number of key-value parameter pairs in these two 
-        experiments share in common. This does not include observations.
+        """Returns the number of key-value parameter pairs that these two 
+        experiments share in common. This does not include observations or
+        metadata keys.
         """
         count = 0
         for k, v in self.data.items():
-            if k in other.data and other.data[k] == v:
+            if k in other.data and other.data[k] == v and k not in METADATA_KEYS:
+                count += 1
+        return count
+
+    def differing_values(self, other):
+        """Returns the number of key-value parameter pairs in these two 
+        experiments that are not the same. This does not include 
+        observations or metadata keys.
+        """
+        count = 0
+        for k, v in self.data.items():
+            if k in other.data and other.data[k] != v and k not in METADATA_KEYS:
                 count += 1
         return count
 
